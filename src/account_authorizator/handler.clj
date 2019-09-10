@@ -1,11 +1,35 @@
 (ns account-authorizator.handler
-  (:require [compojure.core :refer :all]
-            [compojure.route :as route]
-            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
+  (:require [compojure.api.sweet :refer :all]
+            [ring.util.http-response :refer :all]
+            [schema.core :as s]))
 
-(defroutes app-routes
-  (GET "/" [] "Hello World")
-  (route/not-found "Not Found"))
+(s/defschema Pizza
+  {:name s/Str
+   (s/optional-key :description) s/Str
+   :size (s/enum :L :M :S)
+   :origin {:country (s/enum :FI :PO)
+            :city s/Str}})
 
 (def app
-  (wrap-defaults app-routes site-defaults))
+  (api
+    {:swagger
+     {:ui "/"
+      :spec "/swagger.json"
+      :data {:info {:title "Account-authorizator"
+                    :description "Compojure Api example"}
+             :tags [{:name "api", :description "some apis"}]}}}
+
+    (context "/api" []
+      :tags ["api"]
+
+      (GET "/plus" []
+        :return {:result Long}
+        :query-params [x :- Long, y :- Long]
+        :summary "adds two numbers together"
+        (ok {:result (+ x y)}))
+
+      (POST "/echo" []
+        :return Pizza
+        :body [pizza Pizza]
+        :summary "echoes a Pizza"
+        (ok pizza)))))
