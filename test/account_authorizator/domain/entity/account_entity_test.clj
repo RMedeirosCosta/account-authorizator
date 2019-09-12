@@ -18,5 +18,3 @@
 (deftest must-parse-account-to-json-string-when-there-is-no-violations
   (is (= (get-expected-json-string) 
          (to-string (->Account true 100 [])))))
-
-;;FIXME add test if there when there is no restrictions
