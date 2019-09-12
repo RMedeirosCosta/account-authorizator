@@ -6,4 +6,4 @@
     (clojure.string/join 
         ["{ \"account\": { \"activeCard\": ", (:active-card account), ", ",
                           "\"availableLimit\": ", (:available-limit account), " }"
-         ", \"violations\": [ \"", (get (:violations account) 0), "\" ] }"]))
+         ", \"violations\": [\"", (get (:violations account) 0), "\"] }"]))
