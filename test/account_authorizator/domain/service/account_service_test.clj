@@ -15,3 +15,9 @@
 (deftest create-account-when-there-is-previous-account
   (is (= (get-expected-already-initialized-account) 
          (create-account [(get-expected-account)] true 100))))
+
+; FIXMEE not working
+; (deftest initialize-account-must-keep-account-state
+;   (is (= (get-expected-already-initialized-account)
+;          ((initialize-account true 100)
+;           (initialize-account true 100)))))
