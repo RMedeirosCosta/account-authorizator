@@ -1,5 +1,5 @@
 (ns account-authorizator.domain.service.account_service
-    (:require [account-authorizator.domain.entity.account_entity :refer :all]))
+    (:require [account-authorizator.domain.entity.account_entity :refer [->Account]]))
 
 (defn create-account 
    ([created-accounts active-card available-limit] (if
