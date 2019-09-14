@@ -1,5 +1,7 @@
 (ns account-authorizator.domain.service.account_service
-    (:require [account-authorizator.domain.entity.account_entity :refer [->Account]]))
+    (:require
+            [account-authorizator.domain.entity.account_entity :refer [->Account]]
+            [account-authorizator.domain.repository.account_repository :refer [is-empty, save, get-accounts]]))
 
 (defn create
    ([created-accounts active-card available-limit] (if
@@ -8,9 +10,7 @@
                                                        (->Account active-card available-limit ["account-already-initialized"])))
    ([active-card, available-limit] (->Account active-card available-limit [])))
 
-(def created-accounts (atom []))
-
-(defn initialize-account [active-card, available-limit]
-    (if (empty? @created-accounts)
-        (swap! created-accounts conj (create @created-accounts active-card available-limit))
-        (create @created-accounts active-card available-limit)))
+(defn initialize [active-card, available-limit]
+    (if (is-empty)
+        (save (create get-accounts active-card available-limit))
+        (create (get-accounts) active-card available-limit)))
