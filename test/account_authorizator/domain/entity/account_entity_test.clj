@@ -1,6 +1,6 @@
 (ns account-authorizator.domain.entity.account_entity_test
     (:require [clojure.test :refer [deftest, is]]
-              [account-authorizator.domain.entity.account_entity :refer :all]))
+              [account-authorizator.domain.entity.account_entity :refer [->Account, to-string]]))
 
 (defn build-json-string
   [string] (clojure.string/join ["{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 }, \"violations\": [", (if (clojure.string/blank? string) 
