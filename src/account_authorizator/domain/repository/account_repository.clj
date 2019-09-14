@@ -1,12 +1,14 @@
-(ns account-authorizator.domain.repository.account_repository
-    (:require [account-authorizator.domain.entity.account_entity :refer :all]))
+(ns account-authorizator.domain.repository.account_repository)
 
 (def accounts (atom []))
 
-(defn empty []
+(defn is-empty []
     (empty? @accounts))
 
 (defn save [account]
     (swap! accounts conj account))
 
-(defn get [] @accounts)
+(defn get-accounts [] @accounts)
+
+(defn clear []
+    (reset! accounts []))
