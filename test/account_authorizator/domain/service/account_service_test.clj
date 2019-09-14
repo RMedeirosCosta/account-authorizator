@@ -1,6 +1,6 @@
 (ns account-authorizator.domain.service.account_service_test
-  (:use clojure.test)
-  (:require [account-authorizator.domain.entity.account_entity :refer :all]
+  (:require [clojure.test :refer [deftest, is]]
+            [account-authorizator.domain.entity.account_entity :refer :all]
             [account-authorizator.helper.account_helper :refer [get-expected-account]]
             [account-authorizator.domain.service.account_service :refer :all]))
 
