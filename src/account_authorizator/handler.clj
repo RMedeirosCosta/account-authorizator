@@ -1,35 +1,22 @@
 (ns account-authorizator.handler
-  (:require [compojure.api.sweet :refer :all]
-            [ring.util.http-response :refer :all]
-            [schema.core :as s]))
+  (:require [compojure.core :refer :all]
+            [compojure.handler :as handler]
+            [ring.middleware.json :as middleware]
+            [compojure.route :as route]
+            [account-authorizator.domain.service.account_service :refer [create]]
+            [account-authorizator.domain.entity.account_entity :refer [to-string]]))
 
-(s/defschema Pizza
-  {:name s/Str
-   (s/optional-key :description) s/Str
-   :size (s/enum :L :M :S)
-   :origin {:country (s/enum :FI :PO)
-            :city s/Str}})
+    (defroutes app-routes
+      (POST "/" request
+        (let [name (get-in request [:body :name])]                       
+          {:status 200
+           :body {:name name
+           :desc (str "The name you sent to me was " name)}}))
+      (route/resources "/")
+      (route/not-found "Not Found"))
 
-(def app
-  (api
-    {:swagger
-     {:ui "/"
-      :spec "/swagger.json"
-      :data {:info {:title "Account-authorizator"
-                    :description "Compojure Api example"}
-             :tags [{:name "api", :description "some apis"}]}}}
 
-    (context "/api" []
-      :tags ["api"]
-
-      (GET "/plus" []
-        :return {:result Long}
-        :query-params [x :- Long, y :- Long]
-        :summary "adds two numbers together"
-        (ok {:result (+ x y)}))
-
-      (POST "/echo" []
-        :return Pizza
-        :body [pizza Pizza]
-        :summary "echoes a Pizza"
-        (ok pizza)))))
+   (def app
+    (-> (handler/site app-routes)
+        (middleware/wrap-json-body {:keywords? true})
+        middleware/wrap-json-response))

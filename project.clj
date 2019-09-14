@@ -5,5 +5,6 @@
    :ring {:handler account-authorizator.handler/app}
    :uberjar-name "server.jar"
    :profiles {:dev {:dependencies [[javax.servlet/javax.servlet-api "3.1.0"]
-                                  [ring/ring-mock "0.3.2"]]
+                                  [ring/ring-mock "0.3.2"]
+                                  [ring/ring-json "0.5.0"]]
                    :plugins [[lein-ring "0.12.5"]]}})
