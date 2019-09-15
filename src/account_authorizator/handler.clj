@@ -7,7 +7,7 @@
             [account-authorizator.domain.entity.account_entity :refer [to-string]]))
 
 (defroutes app-routes
-  (POST "/" request
+  (POST "/account" request
       (let [account (get-in request [:body :account])]
         {:status 200
          :body {:account account}
