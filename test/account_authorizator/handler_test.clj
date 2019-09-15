@@ -1,4 +1,4 @@
-(ns account-authorizator.core-test
+(ns account-authorizator.handler-test
   (:require [cheshire.core :as cheshire]
             [clojure.test :refer [deftest, is]]
             [account-authorizator.handler :refer [app]]
