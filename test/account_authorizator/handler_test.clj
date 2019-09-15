@@ -1,14 +1,14 @@
 (ns account-authorizator.handler-test
-  (:require [cheshire.core :as cheshire]
-            [clojure.test :refer [deftest, is]]
+  (:require [clojure.test :refer [deftest, is]]
             [account-authorizator.handler :refer [app]]
             [ring.mock.request :as mock]))
 
-(defn parse-body [body]
-  (cheshire/parse-string (slurp body) true))
+(defn get-account []
+  "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 }, \"violations\": [] }")
 
 (deftest a-test
-    (let [response (app (-> (mock/request :get  "/api/plus?x=1&y=2")))
-          body     (parse-body (:body response))]
+    (let [response (app (-> (mock/request :post "/account" "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 } }")
+                            (mock/content-type "application/json")))
+          body     (:body response)]
       (is (= (:status response) 200))
-      (is (= (:result body) 3))))
+      (is (= body (get-account)))))

@@ -10,7 +10,7 @@
   (POST "/account" request
       (let [account (get-in request [:body :account])]
         {:status 200
-         :body {:account account}
+         :body (to-string (create (:activeCard account) (:availableLimit account)))
         }))
       (route/resources "/")
       (route/not-found "Not Found"))
