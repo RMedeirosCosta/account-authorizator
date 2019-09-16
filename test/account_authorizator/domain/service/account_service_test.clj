@@ -17,7 +17,7 @@
 (deftest initialize-must-keep-account-state
    (initialize true 100)
    (is (= (get-expected-already-initialized-account)
-          (initialize true 100))))
+          (initialize true 350))))
           
 (deftest initialize-when-there-is-no-previous-account
     (is (= (get-expected-account)
