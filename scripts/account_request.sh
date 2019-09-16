@@ -1,6 +1,13 @@
+accounts-base-request() {
+  echo "curl -sX "$1" http://localhost:3000/accounts --header 'Content-type:application/json'"
+}
+
 create-account-request() {
-  echo "curl -sX POST http://localhost:3000/accounts --data '$1' --header 'Content-type:application/json'" 
-  echo
+  echo "$(accounts-base-request 'POST') --data '$1'"
+}
+
+get-accounts-request() {
+  echo "$(accounts-base-request 'GET')"
 }
 
 get-json-with-resource-prefix() {
@@ -20,6 +27,9 @@ main() {
 
   echo "Second request..."
   log-and-send-request "$(create-account-request "$(get-json-with-resource-prefix 'account_request_2.json')")"
+
+  echo "Third request..."
+  log-and-send-request "$(get-accounts-request)"
 }
 
 main
