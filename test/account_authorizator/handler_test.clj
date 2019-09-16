@@ -7,7 +7,7 @@
 (defn get-account []
   "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 }, \"violations\": [] }")
 
-(deftest a-test
+(deftest post-account-without-previous-account
     (let [response (app (-> (mock/request :post "/account" "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 } }")
                             (mock/content-type "application/json")))
           body     (:body response)]
