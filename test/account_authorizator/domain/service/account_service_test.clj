@@ -1,7 +1,7 @@
 (ns account-authorizator.domain.service.account_service_test
-  (:require [clojure.test :refer [deftest, is]]
+  (:require [clojure.test :refer [deftest, is, use-fixtures]]
             [account-authorizator.domain.entity.account_entity :refer [->Account]]
-            [account-authorizator.helper.account_helper :refer [get-expected-account]]
+            [account-authorizator.helper.account_helper :refer [get-expected-account, clear-database]]
             [account-authorizator.domain.service.account_service :refer [create, initialize]]))
 
 (defn get-expected-already-initialized-account []
@@ -18,3 +18,9 @@
    (initialize true 100)
    (is (= (get-expected-already-initialized-account)
           (initialize true 100))))
+          
+(deftest initialize-when-there-is-no-previous-account
+    (is (= (get-expected-account)
+           (initialize true 100))))
+
+(use-fixtures :each clear-database)

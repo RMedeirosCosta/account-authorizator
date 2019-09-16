@@ -12,5 +12,5 @@
 
 (defn initialize [active-card, available-limit]
     (if (is-empty)
-        (save (create get-accounts active-card available-limit))
+        (get (save (create (get-accounts) active-card available-limit)) 0)
         (create (get-accounts) active-card available-limit)))
