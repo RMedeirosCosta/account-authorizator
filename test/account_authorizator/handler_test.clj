@@ -11,7 +11,7 @@
   "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 }, \"violations\": [\"account-already-initialized\"] }")
 
 (defn account-post-request []
-  (app (-> (mock/request :post "/account" "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 } }")
+  (app (-> (mock/request :post "/accounts" "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 } }")
            (mock/content-type "application/json"))))
 
 (deftest post-account-without-previous-account
@@ -29,7 +29,7 @@
 
 (deftest get-accounts
     (account-post-request)
-    (let [response (app (-> (mock/request :get "/account")))
+    (let [response (app (-> (mock/request :get "/accounts")))
           body     (:body response)]
       (is (= (:status response) 200))
       (is (= body (get-expected-account)))))

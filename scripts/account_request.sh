@@ -1,5 +1,5 @@
 create-account-request() {
-  echo "curl -sX POST http://localhost:3000/account --data '$1' --header 'Content-type:application/json'" 
+  echo "curl -sX POST http://localhost:3000/accounts --data '$1' --header 'Content-type:application/json'" 
 }
 
 get-json-with-resource-prefix() {

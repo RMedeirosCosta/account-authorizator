@@ -7,11 +7,11 @@
             [account-authorizator.domain.entity.account_entity :refer [to-string]]))
 
 (defroutes app-routes
-  (POST "/account" request
+  (POST "/accounts" request
       (let [account (get-in request [:body :account])]
         {:status 200
          :body (to-string (initialize (:activeCard account) (:availableLimit account)))}))
-  (GET "/account" request
+  (GET "/accounts" request
         {:status 200
          :body (to-string (get-all))})
   (route/resources "/")
