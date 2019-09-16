@@ -1,12 +1,8 @@
 (ns account-authorizator.domain.repository.account_repository_test
     (:require 
             [clojure.test :refer [is, deftest, use-fixtures]]
-            [account-authorizator.helper.account_helper :refer [get-expected-account]]
-            [account-authorizator.domain.repository.account_repository :refer [is-empty, save, get-accounts, clear]]))
-
-(defn clear-database [f]
-    (clear)
-    (f))
+            [account-authorizator.helper.account_helper :refer [get-expected-account, clear-database]]
+            [account-authorizator.domain.repository.account_repository :refer [is-empty, save, get-accounts]]))
 
 (defn get-expected-created-accounts []
     [(get-expected-account)])
