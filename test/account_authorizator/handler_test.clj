@@ -7,7 +7,6 @@
 (defn get-account []
   "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 }, \"violations\": [] }")
 
-;; FIXME Configure text fixture to clean another tests
 (deftest a-test
     (let [response (app (-> (mock/request :post "/account" "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 } }")
                             (mock/content-type "application/json")))
