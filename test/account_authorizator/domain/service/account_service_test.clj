@@ -2,7 +2,7 @@
   (:require [clojure.test :refer [deftest, is, use-fixtures]]
             [account-authorizator.domain.entity.account_entity :refer [->Account]]
             [account-authorizator.helper.account_helper :refer [get-expected-account, clear-database]]
-            [account-authorizator.domain.service.account_service :refer [create, initialize]]))
+            [account-authorizator.domain.service.account_service :refer [create, initialize, get-all]]))
 
 (defn get-expected-already-initialized-account []
   (->Account true 100 ["account-already-initialized"]))
@@ -22,5 +22,10 @@
 (deftest initialize-when-there-is-no-previous-account
     (is (= (get-expected-account)
            (initialize true 100))))
+
+(deftest get-all-must-return-only-the-first-one
+    (initialize true 100)
+    (is (= (get-expected-account)
+           (get-all))))
 
 (use-fixtures :each clear-database)

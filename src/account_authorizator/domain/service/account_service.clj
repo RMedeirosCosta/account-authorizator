@@ -14,3 +14,6 @@
     (if (is-empty)
         (get (save (create (get-accounts) active-card available-limit)) 0)
         (create (get-accounts) active-card available-limit)))
+
+(defn get-all []
+    (get (get-accounts) 0))

@@ -27,4 +27,12 @@
       (is (= (:status response) 200))
       (is (= body (get-expected-already-initialized-account)))))
 
+(deftest get-accounts
+    (account-post-request)
+    (let [response (app (-> (mock/request :get "/account")))
+          body     (:body response)]
+      (is (= (:status response) 200))
+      (is (= body (get-expected-account)))))
+    
+
 (use-fixtures :each clear-database)
