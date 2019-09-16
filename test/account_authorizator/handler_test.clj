@@ -7,9 +7,12 @@
 (defn get-account []
   "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 }, \"violations\": [] }")
 
+(defn account-post-request []
+  (app (-> (mock/request :post "/account" "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 } }")
+                            (mock/content-type "application/json"))))
+
 (deftest post-account-without-previous-account
-    (let [response (app (-> (mock/request :post "/account" "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 } }")
-                            (mock/content-type "application/json")))
+    (let [response (account-post-request)
           body     (:body response)]
       (is (= (:status response) 200))
       (is (= body (get-account)))))
