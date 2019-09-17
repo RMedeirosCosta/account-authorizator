@@ -16,7 +16,9 @@
             (create true remaining-limit)
             (build-account-with-error account "insufficient-limit"))))
 
-(defn make-transaction [account, transaction]
-    (if (not (:activeCard account))
-            (build-account-with-error account "card-not-active")
-            (make-transaction-with-actived-card account transaction)))
+(defn make-transaction
+    ([account, transaction] (if (not (:activeCard account))
+                                    (build-account-with-error account "card-not-active")
+                                    (make-transaction-with-actived-card account transaction)))
+    ([past-transactions, account, transaction] (if (< (count past-transactions) 1)
+                                                   (make-transaction account transaction))))
