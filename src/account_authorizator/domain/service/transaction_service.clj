@@ -2,7 +2,7 @@
     (:require 
              [account-authorizator.domain.service.account_service :refer [create]]
              [account-authorizator.domain.entity.account_entity :refer [->Account]]
-             [account-authorizator.domain.entity.transaction_entity :refer [equals]]))
+             [account-authorizator.domain.entity.transaction_entity :refer [equals, happened-in-two-minutes]]))
 
 (defn remaining-limit [availableLimit, amount]
     (- availableLimit amount))
@@ -20,9 +20,7 @@
 (defn is-double-transaction [past-transactions, transaction]
     (let [last-transaction (last past-transactions)]
     (and (< (count past-transactions) 2)
-         (< (- (.getMinutes (:time transaction))
-               (.getMinutes (:time last-transaction))
-            2))
+         (happened-in-two-minutes last-transaction transaction)
          (equals last-transaction transaction))))
 
 (defn make-transaction
