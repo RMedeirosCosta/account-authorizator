@@ -22,3 +22,17 @@
            (make-transaction
                 (->Account false 100 [])
                 (->Transaction "Itachi Uchiha" 666 (java.util.Date.))))))
+
+(deftest must-not-make-a-transaction-if-there-is-one-similar-in-two-minutes-ago
+    (is (= (->Account true 100 ["double-transaction"])
+           (make-transaction
+                [(->Transaction "Itachi Uchiha" 666 (java.util.Date.))]
+                (->Account true 100 [])
+                (->Transaction "Itachi Uchiha" 666 (java.util.Date.))))))
+
+(deftest must-make-a-transaction-if-there-is-not-one-similar-in-two-minutes-ago
+    (is (= (->Account true 1 [])
+           (make-transaction
+                [(->Transaction "Madara Uchiha" 10 (java.util.Date.))]
+                (->Account true 100 [])
+                (->Transaction "Itachi Uchiha" 99 (java.util.Date.))))))

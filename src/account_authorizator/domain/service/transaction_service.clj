@@ -16,9 +16,20 @@
             (create true remaining-limit)
             (build-account-with-error account "insufficient-limit"))))
 
+(defn is-double-transaction [past-transactions, transaction]
+    (let [last-transaction (last past-transactions)]
+    (and (< (count past-transactions) 2)
+         (< (- (.getMinutes (:time transaction))
+               (.getMinutes (:time last-transaction))
+            2))
+         (and
+            (= (:merchant last-transaction) (:merchant transaction))
+            (= (:amount last-transaction) (:amount transaction))))))
+
 (defn make-transaction
     ([account, transaction] (if (not (:activeCard account))
                                     (build-account-with-error account "card-not-active")
                                     (make-transaction-with-actived-card account transaction)))
-    ([past-transactions, account, transaction] (if (< (count past-transactions) 1)
-                                                   (make-transaction account transaction))))
+    ([past-transactions, account, transaction] (if (is-double-transaction past-transactions transaction)
+                                                        (build-account-with-error account "double-transaction")
+                                                        (make-transaction account transaction))))
