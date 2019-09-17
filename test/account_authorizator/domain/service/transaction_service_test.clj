@@ -6,10 +6,10 @@
              [account-authorizator.domain.service.transaction_service :refer [make-transaction]]))
 
 (deftest must-make-a-transaction
-    (is (= (->Account true 20 [])
+    (is (= (->Account true 0 [])
            (make-transaction 
                 (->Account true 100 []) 
-                (->Transaction "Naruto Uzumaki" 80 (java.util.Date.))))))
+                (->Transaction "Naruto Uzumaki" 100 (java.util.Date.))))))
 
 (deftest must-not-make-a-transaction-without-limit
     (is (= (->Account true 20 ["insufficient-limit"])
