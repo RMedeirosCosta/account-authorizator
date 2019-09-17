@@ -1,7 +1,8 @@
 (ns account-authorizator.domain.service.transaction_service
     (:require 
              [account-authorizator.domain.service.account_service :refer [create]]
-             [account-authorizator.domain.entity.account_entity :refer [->Account]]))
+             [account-authorizator.domain.entity.account_entity :refer [->Account]]
+             [account-authorizator.domain.entity.transaction_entity :refer [equals]]))
 
 (defn remaining-limit [availableLimit, amount]
     (- availableLimit amount))
@@ -22,9 +23,7 @@
          (< (- (.getMinutes (:time transaction))
                (.getMinutes (:time last-transaction))
             2))
-         (and
-            (= (:merchant last-transaction) (:merchant transaction))
-            (= (:amount last-transaction) (:amount transaction))))))
+         (equals last-transaction transaction))))
 
 (defn make-transaction
     ([account, transaction] (if (not (:activeCard account))
