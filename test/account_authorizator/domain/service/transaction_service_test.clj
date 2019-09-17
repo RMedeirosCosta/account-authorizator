@@ -9,10 +9,16 @@
     (is (= (->Account true 20 [])
            (make-transaction 
                 (->Account true 100 []) 
-                (->Transaction "name" 80 (java.util.Date.))))))
+                (->Transaction "Naruto Uzumaki" 80 (java.util.Date.))))))
 
 (deftest must-not-make-a-transaction-without-limit
     (is (= (->Account true 20 ["insufficient-limit"])
            (make-transaction
                 (->Account true 20 [])
-                (->Transaction "name" 80 (java.util.Date.))))))
+                (->Transaction "Sasuke Uchiha" 80 (java.util.Date.))))))
+
+(deftest must-not-make-a-transaction-with-not-active-card
+    (is (= (->Account false 100 ["card-not-active"])
+           (make-transaction
+                (->Account false 100 [])
+                (->Transaction "Itachi Uchiha" 666 (java.util.Date.))))))

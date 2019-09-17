@@ -7,8 +7,10 @@
     (- availableLimit amount))
 
 (defn make-transaction [account, transaction]
-    (let [remaining-limit
-          (remaining-limit (:availableLimit account) (:amount transaction))]
-    (if (> remaining-limit 0)
-        (create true remaining-limit)
-        (->Account (:activeCard account) (:availableLimit account) ["insufficient-limit"]))))
+    (if (not (:activeCard account))
+            (->Account (:activeCard account) (:availableLimit account) ["card-not-active"])
+            (let [remaining-limit
+                (remaining-limit (:availableLimit account) (:amount transaction))]
+                (if (> remaining-limit 0)
+                    (create true remaining-limit)
+                    (->Account (:activeCard account) (:availableLimit account) ["insufficient-limit"])))))
