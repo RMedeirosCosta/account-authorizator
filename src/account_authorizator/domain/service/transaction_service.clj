@@ -6,14 +6,17 @@
 (defn remaining-limit [availableLimit, amount]
     (- availableLimit amount))
 
+(defn build-account-with-error [account, error]
+    (->Account (:activeCard account) (:availableLimit account) [error]))
+
 (defn make-transaction-with-actived-card [account, transaction]
     (let [remaining-limit
         (remaining-limit (:availableLimit account) (:amount transaction))]
         (if (> remaining-limit 0)
             (create true remaining-limit)
-            (->Account (:activeCard account) (:availableLimit account) ["insufficient-limit"]))))
+            (build-account-with-error account "insufficient-limit"))))
 
 (defn make-transaction [account, transaction]
     (if (not (:activeCard account))
-            (->Account (:activeCard account) (:availableLimit account) ["card-not-active"])
+            (build-account-with-error account "card-not-active")
             (make-transaction-with-actived-card account transaction)))
