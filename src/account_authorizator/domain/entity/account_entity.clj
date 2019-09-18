@@ -3,7 +3,7 @@
 (defrecord Account [activeCard, availableLimit, violations])
 
 (defn get-violations [violations]
-    (if (not (empty? violations)) 
+    (if (not-empty violations) 
         (clojure.string/join ["\"", (get violations 0), "\""])
         ""))
 
