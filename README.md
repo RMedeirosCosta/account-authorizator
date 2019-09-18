@@ -6,7 +6,8 @@ FIXME
 
 ### Run the application locally
 
-`lein ring server`
+`lein ring server` or
+`docker build -t account-authorizator . && docker run -it -p 3000:3000 --rm --name account-authorizator account-authorizator`
 
 ### Run the tests
 
