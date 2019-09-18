@@ -14,3 +14,7 @@
 
 (defn same-sorted-transactions [past-transactions, transaction]
     (sort-by :time (filter #(equals % transaction) past-transactions)))
+
+(defn is-high-frequency-small-interval [past-transactions, transaction]
+    (>= (count (filter #(happened-in-two-minutes % transaction) past-transactions))
+        3))

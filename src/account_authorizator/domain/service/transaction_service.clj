@@ -2,7 +2,7 @@
     (:require 
              [account-authorizator.domain.service.account_service :refer [create]]
              [account-authorizator.domain.entity.account_entity :refer [->Account]]
-             [account-authorizator.domain.entity.transaction_entity :refer [same-sorted-transactions, happened-in-two-minutes]]))
+             [account-authorizator.domain.entity.transaction_entity :refer [is-high-frequency-small-interval, same-sorted-transactions, happened-in-two-minutes]]))
 
 (defn remaining-limit [availableLimit, amount]
     (- availableLimit amount))
@@ -26,6 +26,7 @@
     ([account, transaction] (if (not (:activeCard account))
                                     (build-account-with-error account "card-not-active")
                                     (make-transaction-with-actived-card account transaction)))
-    ([past-transactions, account, transaction] (if (is-double-transaction past-transactions transaction)
-                                                        (build-account-with-error account "double-transaction")
-                                                        (make-transaction account transaction))))
+    ([past-transactions, account, transaction] (cond
+                                                    (is-double-transaction past-transactions transaction) (build-account-with-error account "double-transaction")
+                                                    (is-high-frequency-small-interval past-transactions transaction) (build-account-with-error account "high-frequency-small-interval")
+                                                    :else (make-transaction account transaction))))
