@@ -19,7 +19,7 @@
 
 (defn is-double-transaction [past-transactions, transaction]
     (let [sorted-transactions (same-sorted-transactions past-transactions transaction)]
-    (if (not (empty? sorted-transactions))
+    (if (not-empty sorted-transactions)
         (happened-in-two-minutes (last sorted-transactions) transaction))))
 
 (defn make-transaction
