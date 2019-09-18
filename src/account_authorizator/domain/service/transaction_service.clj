@@ -2,7 +2,7 @@
     (:require 
              [account-authorizator.domain.service.account_service :refer [create]]
              [account-authorizator.domain.entity.account_entity :refer [->Account]]
-             [account-authorizator.domain.entity.transaction_entity :refer [equals, happened-in-two-minutes]]))
+             [account-authorizator.domain.entity.transaction_entity :refer [same-sorted-transactions, happened-in-two-minutes]]))
 
 (defn remaining-limit [availableLimit, amount]
     (- availableLimit amount))
@@ -18,10 +18,9 @@
             (build-account-with-error account "insufficient-limit"))))
 
 (defn is-double-transaction [past-transactions, transaction]
-    (let [last-transaction (last past-transactions)]
-    (and (< (count past-transactions) 2)
-         (happened-in-two-minutes last-transaction transaction)
-         (equals last-transaction transaction))))
+    (let [sorted-transactions (same-sorted-transactions past-transactions transaction)]
+    (if (not (empty? sorted-transactions))
+        (happened-in-two-minutes (last sorted-transactions) transaction))))
 
 (defn make-transaction
     ([account, transaction] (if (not (:activeCard account))

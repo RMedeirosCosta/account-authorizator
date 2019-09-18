@@ -11,3 +11,8 @@
 (defn happened-in-two-minutes [transaction, anotherTransaction]
     (<= (t/in-minutes (t/interval (:time transaction) (:time anotherTransaction)) )
         2))
+
+(defn same-sorted-transactions [past-transactions, transaction]
+    (sort-by :time (filter #(and (= (:merchant %) (:merchant transaction))
+                                 (= (:amount %) (:amount transaction)))
+                   past-transactions)))

@@ -6,8 +6,10 @@
              [account-authorizator.domain.service.transaction_service :refer [make-transaction]]))
 
 (require '[clj-time.core :as t])
-; (defn get-iso-date [date]
-;     (parse (formatters :date-time) date))
+(require '[clj-time.format :as f])
+
+(defn get-iso-date [date]
+    (f/parse (f/formatters :date-time) date))
 
 (deftest must-make-a-transaction
     (is (= (->Account true 0 [])
@@ -27,20 +29,19 @@
                 (->Account false 100 [])
                 (->Transaction "Itachi Uchiha" 666 (t/now))))))
 
-; (defn get-transaction-list-with-double-transactions []
-;     [(->Transaction "Itachi Uchiha" 12 (java.util.Date.)),
-;      (->Transaction "Itachi Uchiha" 32 (java.util.Date.)),
-;      (->Transaction "Madara Uchiha" 666 (java.util.Date.)),
-;      (->Transaction "Itachi Uchiha" 666 (java.util.Date.)),
-;      (->Transaction "Madara Uchiha" 666 ])
+(defn get-transaction-list-with-double-transactions []
+    [(->Transaction "Itachi Uchiha" 12 (get-iso-date "2019-02-13T11:00:00.000Z")),
+     (->Transaction "Itachi Uchiha" 32 (get-iso-date "2019-02-13T11:00:00.000Z")),
+     (->Transaction "Madara Uchiha" 666 (get-iso-date "2019-02-13T11:00:00.000Z")),
+     (->Transaction "Itachi Uchiha" 666 (get-iso-date "2019-02-13T11:00:00.000Z")),
+     (->Transaction "Madara Uchiha" 666 (get-iso-date "2019-02-13T11:00:01.000Z"))])
 
 (deftest must-not-make-a-transaction-if-there-is-one-similar-in-two-minutes-ago
     (is (= (->Account true 100 ["double-transaction"])
            (make-transaction
-                ;(get-transaction-list-with-double-transactions)
-                [(->Transaction "Itachi Uchiha" 666 (t/now))]
+                (get-transaction-list-with-double-transactions)
                 (->Account true 100 [])
-                (->Transaction "Itachi Uchiha" 666 (t/now))))))
+                (->Transaction "Itachi Uchiha" 666 (get-iso-date "2019-02-13T11:00:00.000Z"))))))
 
 (deftest must-make-a-transaction-if-there-is-not-one-similar-in-two-minutes-ago
     (is (= (->Account true 1 [])
