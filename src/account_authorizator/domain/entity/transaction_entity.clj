@@ -13,6 +13,4 @@
         2))
 
 (defn same-sorted-transactions [past-transactions, transaction]
-    (sort-by :time (filter #(and (= (:merchant %) (:merchant transaction))
-                                 (= (:amount %) (:amount transaction)))
-                   past-transactions)))
+    (sort-by :time (filter #(equals % transaction) past-transactions)))
