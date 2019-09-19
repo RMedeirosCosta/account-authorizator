@@ -1,9 +1,11 @@
 (ns account-authorizator.domain.service.transaction_service_test
     (:require 
-             [clojure.test :refer [deftest, is]]
+             [clojure.test :refer [deftest, is, use-fixtures]]
+             [account-authorizator.helper.account_helper :refer [clear-database]]
              [account-authorizator.domain.entity.account_entity :refer [->Account]]
              [account-authorizator.domain.entity.transaction_entity :refer [->Transaction]]
-             [account-authorizator.domain.service.transaction_service :refer [make-transaction]]))
+             [account-authorizator.domain.service.transaction_service :refer [complete-transaction, make-transaction]]
+             [account-authorizator.domain.service.account_service :refer [initialize]]))
 
 (require '[clj-time.core :as t])
 (require '[clj-time.format :as f])
@@ -63,3 +65,11 @@
                 (get-transaction-list-with-double-transactions)
                 (->Account true 100 [])
                 (->Transaction "Itachi Uchiha" 666 (get-iso-date "2019-02-13T11:00:00.000Z"))))))
+
+(deftest complete-transaction-must-return-account-with-remaining-available-limit
+    (initialize true 1000)
+    (is (= (->Account true 100 [])
+           (complete-transaction "Martin Scorcese" 900 (t/now))
+           )))
+  
+(use-fixtures :each clear-database)

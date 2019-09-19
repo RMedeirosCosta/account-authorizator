@@ -2,7 +2,9 @@
     (:require 
              [account-authorizator.domain.service.account_service :refer [create]]
              [account-authorizator.domain.entity.account_entity :refer [->Account]]
-             [account-authorizator.domain.entity.transaction_entity :refer [is-high-frequency-small-interval, same-sorted-transactions, happened-in-two-minutes]]))
+             [account-authorizator.domain.repository.account_repository :as acc]
+             [account-authorizator.domain.repository.transaction_repository :as trs]
+             [account-authorizator.domain.entity.transaction_entity :refer [->Transaction, is-high-frequency-small-interval, same-sorted-transactions, happened-in-two-minutes]]))
 
 (defn remaining-limit [availableLimit, amount]
     (- availableLimit amount))
@@ -30,3 +32,8 @@
                                                     (is-double-transaction past-transactions transaction) (build-account-with-error account "double-transaction")
                                                     (is-high-frequency-small-interval past-transactions transaction) (build-account-with-error account "high-frequency-small-interval")
                                                     :else (make-transaction account transaction))))
+
+(defn complete-transaction [merchant, amount, time]
+   (make-transaction (trs/get-transactions)
+                     (last (acc/get-accounts))
+                     (->Transaction merchant amount time)))
