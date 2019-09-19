@@ -3,6 +3,7 @@
              [clojure.test :refer [deftest, is, use-fixtures]]
              [account-authorizator.helper.account_helper :refer [clear-database]]
              [account-authorizator.domain.entity.account_entity :refer [->Account]]
+             [account-authorizator.domain.repository.transaction_repository :as trs]
              [account-authorizator.domain.entity.transaction_entity :refer [->Transaction]]
              [account-authorizator.domain.service.transaction_service :refer [complete-transaction, make-transaction]]
              [account-authorizator.domain.service.account_service :refer [initialize]]))
@@ -69,7 +70,13 @@
 (deftest complete-transaction-must-return-account-with-remaining-available-limit
     (initialize true 1000)
     (is (= (->Account true 100 [])
-           (complete-transaction "Martin Scorcese" 900 (t/now))
-           )))
+           (complete-transaction "Martin Scorcese" 900 (t/now)))))
+
+(deftest complete-transaction-must-persist-the-last-transaction
+   (initialize true 1000)
+   (let [transaction-time (t/now)]
+        (complete-transaction "Stanley Kubrick" 900 transaction-time)
+        (is (= [(->Transaction "Stanley Kubrick" 900 transaction-time)]
+               (trs/get-transactions)))))
   
 (use-fixtures :each clear-database)

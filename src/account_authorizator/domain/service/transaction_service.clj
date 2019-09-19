@@ -12,11 +12,16 @@
 (defn build-account-with-error [account, error]
     (->Account (:activeCard account) (:availableLimit account) [error]))
 
+(defn update-db [remaining-limit, transaction]
+    (acc/clear)
+    (trs/save transaction)
+    (last (acc/save (create true remaining-limit))))
+
 (defn make-transaction-with-actived-card [account, transaction]
     (let [remaining-limit
         (remaining-limit (:availableLimit account) (:amount transaction))]
         (if (>= remaining-limit 0)
-            (create true remaining-limit)
+            (update-db remaining-limit transaction)
             (build-account-with-error account "insufficient-limit"))))
 
 (defn is-double-transaction [past-transactions, transaction]
