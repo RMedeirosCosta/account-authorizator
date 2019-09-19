@@ -38,19 +38,24 @@ log-and-send-request() {
 }
 
 main() {
-  echo "First request..."
   log-and-send-request "$(create-account-request "$(get-json-with-resource-prefix 'account_request.json')")"
 
-  #echo "Second request..."
-  #log-and-send-request "$(create-account-request "$(get-json-with-resource-prefix 'account_request_2.json')")"
+  sleep 2
+  log-and-send-request "$(create-account-request "$(get-json-with-resource-prefix 'account_request_2.json')")"
 
-  echo "Third request..."
+  sleep 2
   log-and-send-request "$(get-accounts-request)"
 
-  #log-and-send-request "$(create-transaction-request "$(get-json-with-resource-prefix 'transaction_request.json')")"
-  #log-and-send-request "$(create-transaction-request "$(get-json-with-resource-prefix 'transaction_request_2.json')")"
+  sleep 2
+  log-and-send-request "$(create-transaction-request "$(get-json-with-resource-prefix 'transaction_request_2.json')")"
+
+  sleep 2
   log-and-send-request "$(create-transaction-request "$(get-json-with-resource-prefix 'transaction_request_3.json')")"
+
+  sleep 2
   log-and-send-request "$(create-transaction-request "$(get-json-with-resource-prefix 'transaction_request_4.json')")"
+
+  sleep 2
   log-and-send-request "$(get-transactions-request)"
 }
 
