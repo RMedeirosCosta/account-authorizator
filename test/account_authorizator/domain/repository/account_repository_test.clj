@@ -7,10 +7,10 @@
 (defn get-expected-created-accounts []
     [(get-expected-account)])
 
-(deftest empty-must-return-true-when-there-is-no-account
+(deftest is-empty-must-return-true-when-there-is-no-account
   (is (= true (is-empty))))
 
-(deftest empty-must-return-false-when-after-an-insertion
+(deftest is-empty-must-return-false-after-an-insertion
   (save "xpto")  
   (is (= false
          (is-empty))))
