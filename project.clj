@@ -1,5 +1,5 @@
  (defproject account-authorizator "0.1.0-SNAPSHOT"
-   :description "FIXME: write description"
+   :description "An application that authorizes a transaction for a specific account following a set of predefined rules"
    :dependencies [[org.clojure/clojure "1.10.0"]
                   [metosin/compojure-api "2.0.0-alpha30"]
                   [clj-time "0.15.2"]]
