@@ -42,7 +42,7 @@
    (if (empty? (get-all))
        (->Account false 0 ["account-not-found"])
        (make-transaction (trs/get-transactions)
-                          (last (acc/get-accounts))
+                          (first (acc/get-accounts))
                           (->Transaction merchant amount time))))
 
 (defn get-all-transactions []
