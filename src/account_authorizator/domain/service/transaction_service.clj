@@ -44,3 +44,6 @@
        (make-transaction (trs/get-transactions)
                           (last (acc/get-accounts))
                           (->Transaction merchant amount time))))
+
+(defn get-all-transactions []
+    (trs/get-transactions))

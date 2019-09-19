@@ -4,7 +4,7 @@
             [ring.middleware.json :refer [wrap-json-body, wrap-json-response]]
             [compojure.route :as route]
             [account-authorizator.domain.service.account_service :refer [initialize, get-all]]
-            [account-authorizator.domain.service.transaction_service :refer [complete-transaction]]
+            [account-authorizator.domain.service.transaction_service :refer [complete-transaction, get-all-transactions]]
             [account-authorizator.domain.entity.account_entity :refer [to-string]]))
 
 (defroutes app-routes
@@ -19,6 +19,9 @@
                                                (:merchant transaction)
                                                (:amount transaction)
                                                (:time transaction)))}))
+  (GET "/transactions" request
+        {:status 200
+         :body (get-all-transactions)})                                    
   (GET "/accounts" request
         {:status 200
          :body (to-string (get-all))})

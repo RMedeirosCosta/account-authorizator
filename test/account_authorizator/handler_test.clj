@@ -13,6 +13,9 @@
 (defn get-expected-already-initialized-account []
   "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 }, \"violations\": [\"account-already-initialized\"] }")
 
+(defn get-expected-transactions []
+  "[{\"merchant\":\"Saitama\",\"amount\":10,\"time\":\"2019-02-13T11:00:00.000Z\"}]")
+
 (defn account-post-request []
   (app (-> (mock/request :post "/accounts" "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 } }")
            (mock/content-type "application/json"))))
@@ -47,5 +50,13 @@
         body     (:body response)]
     (is (= (:status response) 200))
     (is (= body (get-expected-account-after-transaction)))))
+
+(deftest get-transactions
+  (account-post-request)
+  (transaction-post-request)
+  (let [response (app (-> (mock/request :get "/transactions")))
+        body     (:body response)]
+    (is (= (:status response) 200))
+    (is (= body (get-expected-transactions)))))
 
 (use-fixtures :each clear-database)

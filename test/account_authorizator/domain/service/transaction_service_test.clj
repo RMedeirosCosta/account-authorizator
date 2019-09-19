@@ -5,7 +5,7 @@
              [account-authorizator.domain.entity.account_entity :refer [->Account]]
              [account-authorizator.domain.repository.transaction_repository :as trs]
              [account-authorizator.domain.entity.transaction_entity :refer [->Transaction]]
-             [account-authorizator.domain.service.transaction_service :refer [complete-transaction, make-transaction]]
+             [account-authorizator.domain.service.transaction_service :refer [complete-transaction, make-transaction, get-all-transactions]]
              [account-authorizator.domain.service.account_service :refer [initialize]]))
 
 (require '[clj-time.core :as t])
@@ -82,5 +82,12 @@
 (deftest must-not-complete-a-transaction-without-account
     (is (= (->Account false 0 ["account-not-found"])
            (complete-transaction "Quentin Tarantino" 900 (t/now)))))
+
+(deftest get-all-transactions-must-return-all-transaction
+    (initialize true 1000)
+    (let [transaction-time (t/now)]
+        (complete-transaction "Stanley Kubrick" 900 transaction-time)
+        (is (= [(->Transaction "Stanley Kubrick" 900 transaction-time)]
+               (get-all-transactions)))))
   
 (use-fixtures :each clear-database)
