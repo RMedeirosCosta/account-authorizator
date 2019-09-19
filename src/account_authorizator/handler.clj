@@ -7,6 +7,16 @@
             [account-authorizator.domain.service.transaction_service :refer [complete-transaction, get-all-transactions]]
             [account-authorizator.domain.entity.account_entity :refer [to-string]]))
 
+(require '[clj-time.format :as f])
+            
+(defn get-iso-date [date]
+  (f/parse (f/formatters :date-time) date))          
+
+(extend-protocol cheshire.generate/JSONable
+  org.joda.time.DateTime
+    (to-json [dt gen]
+      (cheshire.generate/write-string gen (str dt))))  
+
 (defroutes app-routes
   (POST "/accounts" request
       (let [account (get-in request [:body :account])]
@@ -18,7 +28,8 @@
          :body (to-string (complete-transaction 
                                                (:merchant transaction)
                                                (:amount transaction)
-                                               (:time transaction)))}))
+                                               (get-iso-date (:time transaction))))}))
+
   (GET "/transactions" request
         {:status 200
          :body (get-all-transactions)})                                    
