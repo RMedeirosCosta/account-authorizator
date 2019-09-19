@@ -1,6 +1,6 @@
 (ns account-authorizator.domain.service.transaction_service
     (:require 
-             [account-authorizator.domain.service.account_service :refer [create]]
+             [account-authorizator.domain.service.account_service :refer [get-all, create]]
              [account-authorizator.domain.entity.account_entity :refer [->Account]]
              [account-authorizator.domain.repository.account_repository :as acc]
              [account-authorizator.domain.repository.transaction_repository :as trs]
@@ -39,6 +39,8 @@
                                                     :else (make-transaction account transaction))))
 
 (defn complete-transaction [merchant, amount, time]
-   (make-transaction (trs/get-transactions)
-                     (last (acc/get-accounts))
-                     (->Transaction merchant amount time)))
+   (if (empty? (get-all))
+       (->Account false 0 ["account-not-found"])
+       (make-transaction (trs/get-transactions)
+                          (last (acc/get-accounts))
+                          (->Transaction merchant amount time))))

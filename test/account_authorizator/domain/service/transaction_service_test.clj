@@ -78,5 +78,9 @@
         (complete-transaction "Stanley Kubrick" 900 transaction-time)
         (is (= [(->Transaction "Stanley Kubrick" 900 transaction-time)]
                (trs/get-transactions)))))
+
+(deftest must-not-complete-a-transaction-without-account
+    (is (= (->Account false 0 ["account-not-found"])
+           (complete-transaction "Quentin Tarantino" 900 (t/now)))))
   
 (use-fixtures :each clear-database)
