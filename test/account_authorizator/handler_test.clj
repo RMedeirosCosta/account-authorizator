@@ -7,12 +7,19 @@
 (defn get-expected-account []
   "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 }, \"violations\": [] }")
 
+(defn get-expected-account-after-transaction []
+  "{ \"account\": { \"activeCard\": true, \"availableLimit\": 90 }, \"violations\": [] }")
+
 (defn get-expected-already-initialized-account []
   "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 }, \"violations\": [\"account-already-initialized\"] }")
 
 (defn account-post-request []
   (app (-> (mock/request :post "/accounts" "{ \"account\": { \"activeCard\": true, \"availableLimit\": 100 } }")
            (mock/content-type "application/json"))))
+
+(defn transaction-post-request []
+  (app (-> (mock/request :post "/transactions" "{ \"transaction\": { \"merchant\": \"Saitama\", \"amount\": 10,\"time\": \"2019-02-13T11:00:00.000Z\" } }")
+           (mock/content-type "application/json"))))          
 
 (deftest post-account-without-previous-account
     (let [response (account-post-request)
@@ -33,6 +40,12 @@
           body     (:body response)]
       (is (= (:status response) 200))
       (is (= body (get-expected-account)))))
-    
+
+(deftest post-transaction-with-previous-account
+  (account-post-request)
+  (let [response (transaction-post-request)
+        body     (:body response)]
+    (is (= (:status response) 200))
+    (is (= body (get-expected-account-after-transaction)))))
 
 (use-fixtures :each clear-database)
